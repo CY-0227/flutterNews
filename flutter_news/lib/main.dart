@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_news/pages/welcome.dart';
+import 'package:flutter_news/routes.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void main() {
@@ -14,12 +15,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     ScreenUtil.init(
       context,
-      designSize: const Size(375, 818 - 44- 34),
+      designSize: const Size(375, 818 - 44 - 34),
     );
 
-    return const MaterialApp(
+    return MaterialApp(
       title: 'Flutter Demo',
-      home: WelcomePage(),
+      debugShowCheckedModeBanner: false,
+      home: const WelcomePage(),
+      routes: staticRoutes,
     );
   }
 }
