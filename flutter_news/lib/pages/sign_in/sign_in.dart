@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_news/common/utils/utils.dart';
 import 'package:flutter_news/common/values/values.dart';
@@ -16,13 +17,31 @@ class _SignInPageState extends State<SignInPage> {
 
   _handleSignIn() {
     if (!duIsEmail(_emailController.value.text)) {
-      // toast(msg: '请正确输入邮件');
+      toast(msg: '请正确输入邮件');
       return;
     }
     if (!duIsEmail(_passwordController.value.text)) {
-      // toast(msg: '密码不能小于6位');
+      toast(msg: '密码不能小于6位');
       return;
     }
+  }
+
+  _handleSignUp() {
+    Navigator.pushNamed(context, "/sign_up");
+  }
+
+  void request() async {
+    final dio = Dio();
+    Response response;
+    response = await dio.get('https://yapi.pro/mock/76143/categories');
+    String ss = response.data.toString();
+    print('------$ss');
+    // The below request is the same as above.
+    // response = await dio.get(
+    //   '/test',
+    //   queryParameters: {'id': 12, 'name': 'dio'},
+    // );
+    // print(response.data.toString());
   }
 
   // logo
@@ -121,7 +140,7 @@ class _SignInPageState extends State<SignInPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 btnElevatedButtonWidget(
-                  onPressed: () {},
+                  onPressed: _handleSignUp,
                   title: "Sign up",
                   gbColor: AppColors.thirdElement,
                 ),
@@ -224,7 +243,7 @@ class _SignInPageState extends State<SignInPage> {
           ),
           elevation: MaterialStateProperty.all(0),
         ),
-        onPressed: () {},
+        onPressed: request,
       ),
     );
   }
@@ -232,6 +251,7 @@ class _SignInPageState extends State<SignInPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Center(
         child: Column(
           children: [
