@@ -243,7 +243,8 @@ class _SignInPageState extends State<SignInPage> {
           ),
           elevation: MaterialStateProperty.all(0),
         ),
-        onPressed: request,
+        // onPressed: request,
+        onPressed: () => Navigator.pushNamed(context, '/applicationPage'),
       ),
     );
   }

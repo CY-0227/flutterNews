@@ -195,9 +195,9 @@ class HttpUtil {
 
   /// 读取本地配置
   Map<String, dynamic> getAuthorizationHeader() {
-    var headers;
+    Map<String, dynamic> headers = {};
     String accessToken = Global.profile.accessToken;
-    if (accessToken != null) {
+    if (accessToken.isNotEmpty) {
       headers = {
         'Authorization': 'Bearer $accessToken',
       };
@@ -211,9 +211,9 @@ class HttpUtil {
   /// list 是否列表 默认 false
   /// cacheKey 缓存key
   /// cacheDisk 是否磁盘缓存
-  Future get(
-    String path, {
+  Future get({
     required BuildContext context,
+    required String path,
     dynamic params,
     Options? options,
     bool refresh = false,
@@ -369,8 +369,9 @@ class ErrorEntity implements Exception {
   String message;
   ErrorEntity({this.code = 0, this.message = ''});
 
+  @override
   String toString() {
-    if (message == null) return "Exception";
+    if (message.isEmpty) return "Exception";
     return "Exception: code $code, $message";
   }
 }
