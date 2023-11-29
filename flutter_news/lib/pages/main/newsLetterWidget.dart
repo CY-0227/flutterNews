@@ -6,7 +6,9 @@ import 'package:flutter_news/common/widgets/widgets.dart';
 
 class NewsLetterWidget extends StatefulWidget {
   final Function? callback;
-  const NewsLetterWidget({Key? key, this.callback}) : super(key: key);
+  final Function? subscribeCallback;
+  const NewsLetterWidget({Key? key, this.callback, this.subscribeCallback})
+      : super(key: key);
 
   @override
   _NewsLetterWidgetState createState() => _NewsLetterWidgetState();
@@ -53,7 +55,11 @@ class _NewsLetterWidgetState extends State<NewsLetterWidget> {
           Padding(
             padding: EdgeInsets.only(top: 15),
             child: btnElevatedButtonWidget(
-              onPressed: () {},
+              onPressed: () {
+                if (widget.subscribeCallback != null) {
+                  widget.subscribeCallback!();
+                } else {}
+              },
               width: duSetWidth(335),
               height: duSetHeight(40),
               title: "Subscribe",

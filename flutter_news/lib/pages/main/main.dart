@@ -1,3 +1,4 @@
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_news/common/apis/apis.dart';
 import 'package:flutter_news/common/entitys/entitys.dart';
@@ -31,16 +32,26 @@ class _MainPageState extends State<MainPage> {
 
   ScrollController _controller = ScrollController();
 
+  EasyRefreshController _refreshController = EasyRefreshController(
+    controlFinishLoad: true,
+    controlFinishRefresh: true,
+  );
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
     _controller.addListener(() {
-      print(_controller.offset);
+      // print(_controller.offset);
     });
 
     _loadAllData();
+  }
+
+  void disponse() {
+    _controller.dispose();
+    super.dispose();
   }
 
   _loadAllData() async {
@@ -60,13 +71,14 @@ class _MainPageState extends State<MainPage> {
 
     _channels = await NewsAPI.channels(context: context);
 
-    _selCategoryCode = _categories.first.code!;
+    _selCategoryCode = _categories.first.code ?? '';
     if (mounted) {
       setState(() {});
     }
   }
 
   _loadNewsData(String categoryCode) async {
+    print(categoryCode);
     _selCategoryCode = categoryCode;
     _newsRecommend = await NewsAPI.newsRecommend(
         context: context,
@@ -309,28 +321,47 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SingleChildScrollView(
-        controller: _controller,
-        child: Column(
-          children: [
-            _buildCategory(),
-            const Divider(height: 1),
-            _buildRecommend(),
-            const Divider(height: 1),
-            _buildChannels(),
-            const Divider(height: 1),
-            _buildNewsList(),
-            NewsLetterWidget(
-              callback: () {
-                //   _controller.animateTo(0,
-                //       duration: Duration(seconds: 3), curve: Curves.easeInOut);
-                // },
-                Scrollable.ensureVisible(
-                    _keys[4].currentContext as BuildContext,
-                    duration: const Duration(seconds: 3));
-              },
-            ),
-          ],
+      body: EasyRefresh(
+        controller: _refreshController,
+        header: const ClassicHeader(
+            messageText: 'lalala', backgroundColor: Colors.red),
+        onLoad: () async {
+          print('onLoad');
+          _refreshController.finishLoad(IndicatorResult.noMore);
+        },
+        onRefresh: () async {
+          print('onRefresh');
+          toast(msg: 'onrefresh');
+          _loadNewsData(_selCategoryCode);
+          _refreshController.finishRefresh();
+          _refreshController.resetFooter();
+        },
+        child: SingleChildScrollView(
+          controller: _controller,
+          child: Column(
+            children: [
+              _buildCategory(),
+              const Divider(height: 1),
+              _buildRecommend(),
+              const Divider(height: 1),
+              _buildChannels(),
+              const Divider(height: 1),
+              _buildNewsList(),
+              NewsLetterWidget(
+                callback: () {
+                  //   _controller.animateTo(0,
+                  //       duration: Duration(seconds: 3), curve: Curves.easeInOut);
+                  // },
+                  Scrollable.ensureVisible(
+                      _keys[4].currentContext as BuildContext,
+                      duration: const Duration(seconds: 3));
+                },
+                subscribeCallback: () {
+                  _refreshController.callRefresh();
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

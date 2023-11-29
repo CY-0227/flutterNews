@@ -8,8 +8,8 @@ class NewsAPI {
   static Future<NewsPageListResponseEntity> newsPageList(
       {NewsPageListRequestEntity? params,
       required BuildContext context}) async {
-    var response = await HttpUtil()
-        .get(path: NEWS_PAGE_LIST_URL, params: params, context: context);
+    var response = await HttpUtil().get(
+        path: NEWS_PAGE_LIST_URL, params: params?.toJson(), context: context);
     print(response);
     return NewsPageListResponseEntity.fromJson(response);
   }
@@ -18,8 +18,8 @@ class NewsAPI {
   static Future<Items> newsRecommend(
       {required BuildContext context,
       NewsRecommendRequestEntity? params}) async {
-    var response = await HttpUtil()
-        .get(path: NEWS_RECOMMEND_URL, params: params, context: context);
+    var response = await HttpUtil().get(
+        path: NEWS_RECOMMEND_URL, params: params?.toJson(), context: context);
     // print(response);
     return Items.fromJson(response);
   }
@@ -51,7 +51,7 @@ class NewsAPI {
   static Future<List<TagResponseEntity>> tags(
       {required BuildContext context, required TagRequestEntity params}) async {
     List response = await HttpUtil()
-        .get(path: NEWS_TAGS_URL, context: context, params: params);
+        .get(path: NEWS_TAGS_URL, context: context, params: params.toJson());
     return response
         .map<TagResponseEntity>((item) => TagResponseEntity.fromJson(item))
         .toList();
