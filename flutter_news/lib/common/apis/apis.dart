@@ -6,19 +6,21 @@ import 'package:flutter_news/common/values/values.dart';
 class NewsAPI {
   /// 新闻翻页列表
   static Future<NewsPageListResponseEntity> newsPageList(
-      {required NewsPageListRequestEntity params,
+      {NewsPageListRequestEntity? params,
       required BuildContext context}) async {
     var response = await HttpUtil()
         .get(path: NEWS_PAGE_LIST_URL, params: params, context: context);
+    print(response);
     return NewsPageListResponseEntity.fromJson(response);
   }
 
   /// 推荐
   static Future<Items> newsRecommend(
-      {required NewsRecommendRequestEntity params,
-      required BuildContext context}) async {
+      {required BuildContext context,
+      NewsRecommendRequestEntity? params}) async {
     var response = await HttpUtil()
         .get(path: NEWS_RECOMMEND_URL, params: params, context: context);
+    // print(response);
     return Items.fromJson(response);
   }
 
@@ -27,6 +29,7 @@ class NewsAPI {
       {required BuildContext context}) async {
     List response =
         await HttpUtil().get(path: NEWS_CATEGORIES_URL, context: context);
+    // print(response);
     return response
         .map<CategoryResponseEntity>(
             (item) => CategoryResponseEntity.fromJson(item))

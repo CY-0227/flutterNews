@@ -5,14 +5,10 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Dart: Attach to Process",
+            "name": "Flutter debug",
             "type": "dart",
-            "request": "attach"
-        },
-        {
-            "name": "Flutter: Attach to Device",
-            "type": "dart",
-            "request": "attach"
+            "request": "launch",
+            "program": "lib/main.dart"
         },
 
         {
